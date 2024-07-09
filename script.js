@@ -9,16 +9,27 @@ var typed=new Typed(".typing",{
 
 
  //==============================================//
- document.addEventListener('DOMContentLoaded', function() {
-  var form = document.getElementById('contactForm');
 
-  form.addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent default form submission behavior
+    document.getElementById('contactForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            alert('Your message has been sent successfully!');
+            form.reset();
+        } else {
+            alert('There was a problem with your submission. Please try again.');
+        }
+    });
 
-      // Clear form fields
-      document.getElementById('name').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('subject').value = '';
-      document.getElementById('message').value = '';
-  });
-});
+
